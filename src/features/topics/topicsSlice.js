@@ -1,3 +1,10 @@
+// topicsSlice manages:
+// - selected architecture theme
+// - free-text search term
+// - Wikipedia results
+// - studio board favorites
+// It also defines fetchResults, an async thunk that calls the Wikipedia search API.
+
 import { createSlice, createAsyncThunk, nanoid } from '@reduxjs/toolkit'
 
 // Wikipedia search API (CORS-friendly with origin=*)
