@@ -1,3 +1,5 @@
+//async thunk is A function that wraps some work so it can be done later, when it’s called... wil genrate a pending, fufilled and rejected action 
+
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchResults } from './features/topics/topicsSlice.js'
 import TopicSelector from './components/TopicSelector.jsx'
@@ -5,11 +7,14 @@ import SearchBar from './components/SearchBar.jsx'
 import ResultsGrid from './components/ResultsGrid.jsx'
 import FavoritesPanel from './components/FavoritesPanel.jsx'
 
+//Root application layout: header, contro, , results and studio vboard
 function App() {
   const dispatch = useDispatch()
   const { selectedTopic, searchTerm } = useSelector(
     (state) => state.topics,
   )
+
+  //When the user clicks Search, dispatch an async thunk to load data
 
   const handleSearch = () => {
     dispatch(fetchResults({ topic: selectedTopic, searchTerm }))
