@@ -29,6 +29,11 @@ function App() {
       <header className="app-header">
         <h1>Contemporary Arch Icons</h1>
         <p className="subtitle">
+          <div className="live-badge">
+  <span className="live-dot" />
+  <span className="live-text">Live Wikipedia data</span>
+</div>
+
           Explore contemporary architecture themes and precedents using live
           Wikipedia data. Curate a mini studio board of references for your
           next project.
