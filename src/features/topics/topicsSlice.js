@@ -10,12 +10,10 @@ import { createSlice, createAsyncThunk, nanoid } from '@reduxjs/toolkit'
 // Wikipedia search API (CORS-friendly with origin=*)
 const BASE_URL = 'https://en.wikipedia.org/w/api.php'
 
-// AJAX: fetch contemporary architecture topics from Wikipedia
 // Async thunk: perform an AJAX call to the Wikipedia search API.
 // - Builds a query string using URLSearchParams
 // - Sends a GET request with fetch
 // - Normalizes the response into simple card objects for the UI
-
 export const fetchResults = createAsyncThunk(
   'topics/fetchResults',
   async ({ topic, searchTerm }) => {
@@ -24,8 +22,8 @@ export const fetchResults = createAsyncThunk(
       topic ||
       'contemporary architecture'
 
-// Use URLSearchParams so the query string is constructed safely and clearly
-      const params = new URLSearchParams({
+    // Use URLSearchParams so the query string is constructed safely and clearly
+    const params = new URLSearchParams({
       action: 'query',
       format: 'json',
       list: 'search',
@@ -41,6 +39,7 @@ export const fetchResults = createAsyncThunk(
     if (!res.ok) {
       throw new Error('Failed to load architecture topics')
     }
+
     const data = await res.json()
 
     const results = (data.query?.search || []).map((item) => ({
@@ -66,28 +65,36 @@ const initialTopics = [
   'Sustainable architecture',
 ]
 
+const initialState = {
+  availableTopics: initialTopics,
+  selectedTopic: initialTopics[0],
+  searchTerm: '',
+  lastQuery: '',
+  results: [],
+  favorites: [],
+  status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
+  error: null,
+}
+
 const topicsSlice = createSlice({
   name: 'topics',
-  initialState: {
-    availableTopics: initialTopics,
-    selectedTopic: initialTopics[0],
-    searchTerm: '',
-    lastQuery: '',
-    results: [],
-    favorites: [],
-    status: 'idle',
-    error: null,
-  },
+  initialState,
   reducers: {
+    // Change the currently selected architecture theme
     setSelectedTopic(state, action) {
       state.selectedTopic = action.payload
     },
+
+    // Keep the free-text search term in Redux so multiple components can read it
     setSearchTerm(state, action) {
       state.searchTerm = action.payload
     },
+
+    // Add/remove a card from the favorites board
     toggleFavorite(state, action) {
       const id = action.payload
       const exists = state.favorites.find((card) => card.id === id)
+
       if (exists) {
         state.favorites = state.favorites.filter((card) => card.id !== id)
       } else {
@@ -96,6 +103,11 @@ const topicsSlice = createSlice({
           state.favorites.push({ ...card, savedKey: nanoid() })
         }
       }
+    },
+
+    // Clear the entire favorites board
+    clearFavorites(state) {
+      state.favorites = []
     },
   },
   extraReducers: (builder) => {
@@ -116,7 +128,11 @@ const topicsSlice = createSlice({
   },
 })
 
-export const { setSelectedTopic, setSearchTerm, toggleFavorite } =
-  topicsSlice.actions
+export const {
+  setSelectedTopic,
+  setSearchTerm,
+  toggleFavorite,
+  clearFavorites,
+} = topicsSlice.actions
 
 export default topicsSlice.reducer
