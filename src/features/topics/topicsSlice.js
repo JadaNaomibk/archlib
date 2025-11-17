@@ -11,6 +11,11 @@ import { createSlice, createAsyncThunk, nanoid } from '@reduxjs/toolkit'
 const BASE_URL = 'https://en.wikipedia.org/w/api.php'
 
 // AJAX: fetch contemporary architecture topics from Wikipedia
+// Async thunk: perform an AJAX call to the Wikipedia search API.
+// - Builds a query string using URLSearchParams
+// - Sends a GET request with fetch
+// - Normalizes the response into simple card objects for the UI
+
 export const fetchResults = createAsyncThunk(
   'topics/fetchResults',
   async ({ topic, searchTerm }) => {
@@ -19,7 +24,8 @@ export const fetchResults = createAsyncThunk(
       topic ||
       'contemporary architecture'
 
-    const params = new URLSearchParams({
+// Use URLSearchParams so the query string is constructed safely and clearly
+      const params = new URLSearchParams({
       action: 'query',
       format: 'json',
       list: 'search',
@@ -30,6 +36,7 @@ export const fetchResults = createAsyncThunk(
 
     const url = `${BASE_URL}?${params.toString()}`
 
+    // Send the HTTP request to Wikipedia. origin=* is required for browser CORS.
     const res = await fetch(url)
     if (!res.ok) {
       throw new Error('Failed to load architecture topics')
