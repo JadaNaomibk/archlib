@@ -1,6 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { toggleFavorite } from '../features/topics/topicsSlice.js'
 
+
+// ResultsGrid renders Wikipedia search results as contemporary precedent cards
 function ResultsGrid() {
   const dispatch = useDispatch()
   const { results, status, error, lastQuery, favorites } = useSelector(
