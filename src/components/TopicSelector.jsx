@@ -1,3 +1,4 @@
+// TopicSelector renders pill buttons for curated contemporary architecture themes
 import { useDispatch, useSelector } from 'react-redux'
 import { setSelectedTopic } from '../features/topics/topicsSlice.js'
 
