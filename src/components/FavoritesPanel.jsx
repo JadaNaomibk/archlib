@@ -1,3 +1,4 @@
+// FavoritesPanel shows the "studio board" of saved precedents
 import { useSelector, useDispatch } from 'react-redux'
 import { toggleFavorite } from '../features/topics/topicsSlice.js'
 
